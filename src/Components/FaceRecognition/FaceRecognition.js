@@ -5,14 +5,17 @@ class FaceRecognition extends Component {
 
     constructor(props) {
        
-        super();                
+        super();  
+        this.props = props;              
     }   
            
     render() {             
         return (
             <>                          
-                <div className='center'> 
-                    <img alt='' src={'https://www.biography.com/.image/ar_1:1%2Cc_fill%2Ccs_srgb%2Cg_face%2Cq_auto:good%2Cw_300/MTgwNTA1Mzc0MzgwNTMzMzky/gettyimages-150327735-copy.jpg'} />
+                <div className='center ma'> 
+                    <div className='absolute mt2'>
+                        <img alt='' src={this.props.imageURL} width='500px' height='auto' />       
+                    </div>                                
                 </div>              
             </>
         );

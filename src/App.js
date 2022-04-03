@@ -17,23 +17,32 @@ class App extends Component {
 
   constructor() {
     super();
+    
     this.state = {
-      input: ''
+      input: '',
+      imageURL: ''
     }   
+
+    this.inputURL = "";
   }
 
   onInputChange = (event) => {    
-    console.log(event.target.value);
+    this.setState({
+      "input": event.target.value
+    });
   }
 
   onButtonSubmit = (event) => {
-    console.log("click");
+    
+    this.setState(
+      {imageURL: this.state.input}
+    );
 
     cApp.models.predict(
       Clarifai.FACE_DETECT_MODEL, //model
-      "https://www.biography.com/.image/ar_1:1%2Cc_fill%2Ccs_srgb%2Cg_face%2Cq_auto:good%2Cw_300/MTgwNTA1Mzc0MzgwNTMzMzky/gettyimages-150327735-copy.jpg").then(
+      this.state.input).then(
       (response) => {
-        console.log(response);
+        console.log(response.outputs[0].data.regions[0].region_info.bounding_box);
       },
       (error) => {
 
@@ -55,7 +64,7 @@ class App extends Component {
           <Logo />
           <Rank />
           <ImageLinkForm onInputChange={this.onInputChange} onButtonSubmit={this.onButtonSubmit} />                    
-          <FaceRecognition />         
+          <FaceRecognition imageURL={this.state.imageURL} />         
         </div>
       );
   }

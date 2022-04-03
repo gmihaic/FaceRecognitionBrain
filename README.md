@@ -1,1 +1,1 @@
-# A face recognition app using Node.js, React and the Clarifai API
+# Frontend for a face recognition app using Node.js, React and the Clarifai API
