@@ -88,10 +88,14 @@ class App extends Component {
       route: route,
       isSignedIn: (route === "home") ? true : false
     });    
-  }
+  }  
 
-  render() {      
+  render() {          
+    
+      const { isSignedIn, imageURL, route, box } = this.state;
+
       return (
+       
         <div className="App">
               <Particles
                 className="particles"
@@ -99,18 +103,18 @@ class App extends Component {
                 options={particleOptions}
               />    
     
-          <Nav isSignedIn={this.state.isSignedIn} onRouteChange={this.onRouteChange} title="test" />
+          <Nav isSignedIn={isSignedIn} onRouteChange={this.onRouteChange} title="test" />
          
-          { this.state.route === 'home' ?
+          { route === 'home' ?
             <>
             <Logo />
             <Rank />
             <ImageLinkForm onInputChange={this.onInputChange} onButtonSubmit={this.onButtonSubmit} />                    
-            <FaceRecognition key="facereq" box={this.state.box} imageURL={this.state.imageURL} />     
+            <FaceRecognition key="facereq" box={box} imageURL={imageURL} />     
             </>
             :
             (
-              (this.state.route === 'signin' || this.state.route === 'signout') ? <Signin onRouteChange={this.onRouteChange} /> :
+              (route === 'signin' || route === 'signout') ? <Signin onRouteChange={this.onRouteChange} /> :
               <Register onRouteChange={this.onRouteChange} />
             )
          }
