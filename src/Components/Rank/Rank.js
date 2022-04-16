@@ -3,21 +3,24 @@ import './Rank.css'
 
 class Rank extends Component {
 
-    constructor() {
+    constructor(props) {
 
         super();
-       
+        this.props = props;
     }   
            
-    render() {             
+    render() {    
+
+        const {name, entries} = this.props;
+
         return (
             <>                          
                 <div>      
                     <div className="white f3">
-                        {'Andrei, your current rank is ...'}
+                        {name}, your current entry count is ...                       
                     </div>   
                     <div className="white f1">
-                        {'#5'}
+                        {entries}
                     </div>                                   
                 </div>              
             </>
