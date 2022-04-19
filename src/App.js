@@ -7,13 +7,8 @@ import Signin from './Components/Signin/Signin'
 import Register from './Components/Register/Register'
 import Rank from './Components/Rank/Rank'
 import Particles from 'react-tsparticles';
-import Clarifai from 'clarifai';
 import {particleOptions} from './config.js'
 import './App.css';
-
-const cApp = new Clarifai.App({
-  apiKey: "b54fcccc6684474aaaa1c2bcb8b76479"
-});
 
 class App extends Component {  
 
@@ -57,7 +52,8 @@ class App extends Component {
   }
 
   calculateFaceLocation = (data) => {
-    const clarifaiFace = data.outputs[0].data.regions[0].region_info.bounding_box;
+    //const clarifaiFace = data.outputs[0].data.regions[0].region_info.bounding_box;
+    const clarifaiFace = data; //server API returns bounding box
     const image = document.getElementById('faceRecognitionImage');
     const width = Number(image.width);
     const height = Number(image.height);
@@ -91,7 +87,48 @@ class App extends Component {
       }
     );
 
-    cApp.models.predict(
+    const imageAPIURL = 'http://localhost:3610/recogniseImage';
+
+    fetch(imageAPIURL, {
+        method: 'post',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            "imageURL": this.state.input            
+        })
+    })
+      .then((response) => response.json())
+      .then((imageData) => {
+          if (imageData && imageData?.top_row) {
+            
+            //incr image hits
+            fetch("http://localhost:3610/image", {
+                method: 'put',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    id: this.state.user.id                    
+                })
+            })
+            .then((response) => response.json())
+            .then((data) => {
+                //if (data === 'success') {
+                if (data) {
+                    //const userState = {...this.state.user};
+                    //userState.entries = data;
+                    //this.loadUser(userState);
+                    
+                    this.setState(Object.assign(this.state.user, {entries: data}));
+                } else {               
+                }
+            });
+
+            //display face box
+            this.displayFaceBox(this.calculateFaceLocation(imageData));
+          } else {   
+
+          }
+      });
+
+    /*cApp.models.predict(
         Clarifai.FACE_DETECT_MODEL, //model
         this.state.input
       )
@@ -110,9 +147,9 @@ class App extends Component {
             .then((data) => {
                 //if (data === 'success') {
                 if (data) {
-                    /*const userState = {...this.state.user};
-                    userState.entries = data;
-                    this.loadUser(userState);*/ 
+                    //const userState = {...this.state.user};
+                    //userState.entries = data;
+                    //this.loadUser(userState);
                     
                     this.setState(Object.assign(this.state.user, {entries: data}));
                 } else {               
@@ -124,7 +161,7 @@ class App extends Component {
       )
       .catch((err) => {
         console.error(err);
-      });
+      });*/
 
   }
 
