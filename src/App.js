@@ -126,43 +126,7 @@ class App extends Component {
           } else {   
 
           }
-      });
-
-    /*cApp.models.predict(
-        Clarifai.FACE_DETECT_MODEL, //model
-        this.state.input
-      )
-      .then(
-        (response) => {
-          //console.log(response.outputs[0].data.regions[0].region_info.bounding_box);
-          if (response) {            
-            fetch("http://localhost:3610/image", {
-                method: 'put',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({
-                    id: this.state.user.id                    
-                })
-            })
-            .then((response) => response.json())
-            .then((data) => {
-                //if (data === 'success') {
-                if (data) {
-                    //const userState = {...this.state.user};
-                    //userState.entries = data;
-                    //this.loadUser(userState);
-                    
-                    this.setState(Object.assign(this.state.user, {entries: data}));
-                } else {               
-                }
-            });  
-          }
-          this.displayFaceBox(this.calculateFaceLocation(response));
-        }      
-      )
-      .catch((err) => {
-        console.error(err);
-      });*/
-
+      });    
   }
 
   onRouteChange = (route) => {   
