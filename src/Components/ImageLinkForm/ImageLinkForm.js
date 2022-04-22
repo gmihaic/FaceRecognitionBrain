@@ -9,6 +9,12 @@ class ImageLinkForm extends Component {
        
         this.props = props;        
     }   
+
+    checkEnterImageDetect = (event) => {        
+        if (event.keyCode === 13) {
+            this.props.onDetect();
+        }
+    }    
            
     render() {             
         return (
@@ -21,8 +27,8 @@ class ImageLinkForm extends Component {
                     
                     <div className='center'>
                         <div className="form center pa4 br3 shadow-5">
-                            <input className='f4 pa2 w-70 center' type='text' onChange={this.props.onInputChange} />
-                            <button className='w-30 grow f4 link ph3 pv2 dib white bg-light-purple' onClick={this.props.onButtonSubmit} >Detect</button>
+                            <input onKeyUp={this.checkEnterImageDetect} className='f4 pa2 w-70 center' type='text' onChange={this.props.onInputChange} />
+                            <button className='w-30 grow f4 link ph3 pv2 dib white bg-light-purple' onClick={this.props.onDetect} >Detect</button>
                         </div>
                     </div>     
 

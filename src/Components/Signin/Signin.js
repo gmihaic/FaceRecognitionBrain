@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import './Signin.css'
+import Validation from './../../SubComponents/Validation/Validation';
+import {is_email_valid} from 'node-email-validation';
 
 class Signin extends Component {
 
@@ -9,7 +11,8 @@ class Signin extends Component {
         
         this.state = {
             signInEmail: '',
-            signInPassword: ''            
+            signInPassword: '',
+            errors: []          
         }         
     }   
 
@@ -26,8 +29,35 @@ class Signin extends Component {
     }
 
     onSubmitSignIn = () => {
-        /*console.log(this.state);
-        this.props.onRouteChange("home");*/
+
+        let {signInEmail, signInPassword} = this.state;
+
+        const errors = [];
+
+        signInEmail = signInEmail.trim();
+        signInPassword = signInPassword.trim();
+                
+        if (signInEmail.length === 0 || !is_email_valid(signInEmail)) {
+            errors.push("Please enter a valid email");
+        } 
+
+        if (signInPassword.length === 0 || signInPassword.length < 8) {
+            errors.push("Please enter a password of at least 8 characters");
+        }
+     
+        if (errors.length > 0) {
+            
+            this.setState({
+                errors: errors
+            });
+
+            return;
+
+        } else {
+            this.setState({
+                errors: []
+            });            
+        }
 
         fetch("http://localhost:3610/signin", {
             method: 'post',
@@ -43,10 +73,19 @@ class Signin extends Component {
              if (data && data?.email) {
                 this.props.loadUser(data); 
                 this.props.onRouteChange("home");
-             } else {               
+             } else {   
+                this.setState({
+                    errors: ["Could not sign in"]
+                });             
              }
          });                  
     }
+
+    checkEnterSubmit = (event) => {
+        if (event.keyCode === 13) {
+            this.onSubmitSignIn();
+        }
+    }    
            
     render() {           
         
@@ -57,22 +96,27 @@ class Signin extends Component {
                     <article className="br3 ba dark-gray b--black-10 mv4 w-100 w-50-m w-25-l mw6 shadow-5 center">      
                     <main className="pa4 black-80">
                         <div className="measure">
+
                             <fieldset id="sign_up" className="ba b--transparent ph0 mh0">
-                            <legend className="f1 fw6 ph0 mh0">Sign In</legend>
-                            <div className="mt3">
-                                <label className="db fw6 lh-copy f6" htmlFor="email-address">Email</label>
-                                <input onChange={this.onEmailChange} className="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100" type="email" name="email-address"  id="email-address" />
-                            </div>
-                            <div className="mv3">
-                                <label className="db fw6 lh-copy f6" htmlFor="password">Password</label>
-                                <input onChange={this.onPasswordChange} className="b pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100" type="password" name="password"  id="password" />
-                            </div>                            
+                                <legend className="f1 fw6 ph0 mh0">Sign In</legend>
+                                <div className="mt3">
+                                    <label className="db fw6 lh-copy f6" htmlFor="email-address">Email</label>
+                                    <input onKeyUp={this.checkEnterSubmit} onChange={this.onEmailChange} className="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100" type="email" name="email-address"  id="email-address" />
+                                </div>
+                                <div className="mv3">
+                                    <label className="db fw6 lh-copy f6" htmlFor="password">Password</label>
+                                    <input onKeyUp={this.checkEnterSubmit} onChange={this.onPasswordChange} className="b pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100" type="password" name="password"  id="password" />
+                                </div>                            
                             </fieldset>
+
+                            <Validation key="SigninValidation" type="signin" errors={this.state.errors} />
+
                             <div className="">
-                            <input onClick={this.onSubmitSignIn} className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib" type="submit" value="Sign in" />
+                                <input onClick={this.onSubmitSignIn} className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib" type="submit" value="Sign in" />
                             </div>
+
                             <div className="lh-copy mt3">
-                            <p onClick={() => onRouteChange('register')} className="f6 link dim black db pointer">Register</p>                            
+                                <p onClick={() => onRouteChange('register')} className="f6 link dim black db pointer">Register</p>                            
                             </div>
                         </div>
                     </main>         

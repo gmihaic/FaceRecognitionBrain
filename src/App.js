@@ -27,7 +27,8 @@ class App extends Component {
         email: '',
         entries: 0,
         joined: ''
-      }
+      },
+      image_errors: []
     }   
 
     this.inputURL = "";
@@ -74,19 +75,44 @@ class App extends Component {
 
   onInputChange = (event) => {    
     this.setState({
-      "input": event.target.value
+      "input": event.target.value.trim()
     });
   }
 
-  onButtonSubmit = (event) => {
+  onDetect = (event) => {
     
+    const errors = [];
+       
+    try {       
+        if (!this.state.input || (this.state.input.substr(0, 7) != "http://" && this.state.input.substr(0, 8) != "https://") ) {
+          throw "invalid image";
+        }               
+    } 
+    catch (err) {        
+        errors.push("Invalid image URL");
+    }
+
+    if (errors.length > 0) {
+      
+      this.setState({
+        "image_errors": errors
+      });
+
+      return;
+
+    } else {
+      this.setState({
+        "image_errors": []
+      });
+    }
+
     this.setState(
       {
-        imageURL: this.state.input,
+        imageURL: this.state.input.trim(),
         box: {}
       }
-    );
-
+    );    
+    
     const imageAPIURL = 'http://localhost:3610/recogniseImage';
 
     fetch(imageAPIURL, {
@@ -124,7 +150,9 @@ class App extends Component {
             //display face box
             this.displayFaceBox(this.calculateFaceLocation(imageData));
           } else {   
-
+            this.setState({
+              "image_errors": ["Could not detect the face on the image"]
+            });
           }
       });    
   }
@@ -156,8 +184,8 @@ class App extends Component {
             <>
             <Logo />
             <Rank key="facerank" name={this.state.user.name} entries={this.state.user.entries} />
-            <ImageLinkForm onInputChange={this.onInputChange} onButtonSubmit={this.onButtonSubmit} />                    
-            <FaceRecognition key="facereq" box={box} imageURL={imageURL} />     
+            <ImageLinkForm onInputChange={this.onInputChange} onDetect={this.onDetect} />                    
+            <FaceRecognition image_errors={this.state.image_errors} key="facereq" box={box} imageURL={imageURL} />     
             </>
             :
             (
