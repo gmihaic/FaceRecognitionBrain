@@ -140,17 +140,13 @@ class App extends Component {
                 method: 'put',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
-                    id: this.state.user.id                    
+                    id: this.state.user.id,
+                    imageURL: this.state.imageURL                    
                 })
             })
             .then((response) => response.json())
-            .then((data) => {
-                //if (data === 'success') {
-                if (data) {
-                    //const userState = {...this.state.user};
-                    //userState.entries = data;
-                    //this.loadUser(userState);
-                    
+            .then((data) => {               
+                if (data) {                                        
                     this.setState(Object.assign(this.state.user, {entries: data}));
                 } else {               
                 }
