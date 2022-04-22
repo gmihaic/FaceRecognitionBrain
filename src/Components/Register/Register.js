@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import {countries} from 'countries-list';
 import { particleOptions } from '../../config';
-import Validation from './../../SubComponents/Validation/Validation'
+import Validation from './../../SubComponents/Validation/Validation';
+import {is_email_valid} from 'node-email-validation';
 
 class Register extends Component {
 
@@ -14,6 +15,7 @@ class Register extends Component {
             email: '',
             password: '',
             name: '',
+            country: '',
             errors: []
         }  
     }   
@@ -36,14 +38,60 @@ class Register extends Component {
         );
     }
 
-    onSubmitRegister = () => {       
+    onCountryChange = (event) => {
+        this.setState(
+            {country: event.target.value}
+        );
+    }    
+
+    onSubmitRegister = () => {     
+        
+        let {email, password, name, country} = this.state;
+
+        const errors = [];
+
+        email = email.trim();
+        password = password.trim();
+        name = name.trim();
+        country = country.trim();
+          
+        if (email.length === 0 || !is_email_valid(email)) {
+            errors.push("Please enter a valid email");
+        } 
+
+        if (password.length === 0 || password.length < 8) {
+            errors.push("Please enter a password of at least 8 characters");
+        }
+
+        if (name.length === 0) {
+            errors.push("Please enter your name");
+        }
+
+        if (country.length === 0) {
+            errors.push("Please select your country");
+        }
+
+        if (errors.length > 0) {
+            
+            this.setState({
+                errors: errors
+            });
+
+            return;
+        } else {
+            this.setState({
+                errors: []
+            });
+        }
+        
         fetch("http://localhost:3610/register", {
             method: 'post',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
-                email: this.state.email,
-                password: this.state.password,
-                name: this.state.name
+                email: email,
+                password: password,
+                name: name,
+                country: country
             })
         })
          .then((response) => response.json())
@@ -51,7 +99,10 @@ class Register extends Component {
              if (user && user?.email) {
                 this.props.loadUser(user); 
                 this.props.onRouteChange("home");
-             } else {               
+             } else {    
+                this.setState({
+                    errors: ["Could not register"]
+                });       
              }
          });                  
     }    
@@ -59,11 +110,19 @@ class Register extends Component {
     getCountrySelectOptions = () => {
         const options = [];
 
+        options.push(<option key={"countryOption" + "Nuffin"} value="">Please choose</option>)
+
         for (let countryCode in countries) {
-            options.push(<option key={"countryOption" + countryCode} value="countryCode">{countries[countryCode].name}</option>);
+            options.push(<option key={"countryOption" + countryCode} value={countries[countryCode].name}>{countries[countryCode].name}</option>);
         }
 
         return options;
+    }
+
+    checkEnterSubmit = (event) => {
+        if (event.keyCode === 13) {
+            this.onSubmitRegister();
+        }
     }
            
     render() {         
@@ -80,19 +139,19 @@ class Register extends Component {
                                 <legend className="f1 fw6 ph0 mh0">Register</legend>
                                 <div className="mt3">
                                     <label className="db fw6 lh-copy f6" htmlFor="name">Name</label>
-                                    <input onChange={this.onNameChange} className="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100" type="text" name="name" id="name" />
+                                    <input onKeyUp={this.checkEnterSubmit} onChange={this.onNameChange} className="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100" type="text" name="name" id="name" />
                                 </div>
                                 <div className="mt3">
                                     <label className="db fw6 lh-copy f6" htmlFor="email-address">Email</label>
-                                    <input onChange={this.onEmailChange} className="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100" type="email" name="email-address"  id="email-address" />
+                                    <input onKeyUp={this.checkEnterSubmit} onChange={this.onEmailChange} className="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100" type="email" name="email-address"  id="email-address" />
                                 </div>
                                 <div className="mv3">
                                     <label className="db fw6 lh-copy f6" htmlFor="password">Password</label>
-                                    <input onChange={this.onPasswordChange} className="b pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100" type="password" name="password"  id="password" />
+                                    <input onKeyUp={this.checkEnterSubmit} onChange={this.onPasswordChange} className="b pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100" type="password" name="password"  id="password" />
                                 </div>    
                                 <div className="mv3">
                                     <label className="db fw6 lh-copy f6" htmlFor="country">Country</label>
-                                    <select id="country" name="country" className="b pa2 ba bg-transparent hover-bg-black hover-white w-100" >
+                                    <select onChange={this.onCountryChange} id="country" name="country" className="b pa2 ba bg-transparent hover-bg-black hover-white w-100" >
                                         {this.getCountrySelectOptions()}
                                     </select>
                                 </div>                        

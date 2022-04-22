@@ -8,6 +8,7 @@
     "@testing-library/user-event": "^13.5.0",
     "countries-list": "^2.6.1",
     "md5": "^2.3.0",
+    "node-email-validation": "^1.0.4",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-parallax-tilt": "^1.6.6",
