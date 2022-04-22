@@ -28,7 +28,8 @@ class App extends Component {
         entries: 0,
         joined: ''
       },
-      image_errors: []
+      image_errors: [],
+      image_is_loading: false
     }   
 
     this.inputURL = "";
@@ -109,6 +110,7 @@ class App extends Component {
     this.setState(
       {
         imageURL: this.state.input.trim(),
+        image_is_loading: true,
         box: {}
       }
     );    
@@ -124,6 +126,13 @@ class App extends Component {
     })
       .then((response) => response.json())
       .then((imageData) => {
+
+          this.setState(
+            {           
+              image_is_loading: false          
+            }
+          );    
+
           if (imageData && imageData?.top_row) {
             
             //incr image hits
@@ -184,7 +193,8 @@ class App extends Component {
             <>
             <Logo />
             <Rank key="facerank" name={this.state.user.name} entries={this.state.user.entries} />
-            <ImageLinkForm onInputChange={this.onInputChange} onDetect={this.onDetect} />                    
+            
+            <ImageLinkForm image_is_loading={this.state.image_is_loading} onInputChange={this.onInputChange} onDetect={this.onDetect} />                    
             <FaceRecognition image_errors={this.state.image_errors} key="facereq" box={box} imageURL={imageURL} />     
             </>
             :

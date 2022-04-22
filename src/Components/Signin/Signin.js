@@ -12,7 +12,8 @@ class Signin extends Component {
         this.state = {
             signInEmail: '',
             signInPassword: '',
-            errors: []          
+            errors: [],
+            is_loading: false          
         }         
     }   
 
@@ -59,6 +60,10 @@ class Signin extends Component {
             });            
         }
 
+        this.setState({
+            is_loading: true
+        });
+
         fetch("http://localhost:3610/signin", {
             method: 'post',
             headers: {'Content-Type': 'application/json'},
@@ -69,7 +74,11 @@ class Signin extends Component {
         })
          .then((response) => response.json())
          .then((data) => {
-             //if (data === 'success') {
+
+            this.setState({
+                is_loading: false
+            });
+
              if (data && data?.email) {
                 this.props.loadUser(data); 
                 this.props.onRouteChange("home");
@@ -111,13 +120,21 @@ class Signin extends Component {
 
                             <Validation key="SigninValidation" type="signin" errors={this.state.errors} />
 
-                            <div className="">
-                                <input onClick={this.onSubmitSignIn} className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib" type="submit" value="Sign in" />
-                            </div>
+                            {!this.state.is_loading ?
+                                <>
+                                    <div className="">
+                                        <input onClick={this.onSubmitSignIn} className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib" type="submit" value="Sign in" />
+                                    </div>
 
-                            <div className="lh-copy mt3">
-                                <p onClick={() => onRouteChange('register')} className="f6 link dim black db pointer">Register</p>                            
-                            </div>
+                                    <div className="lh-copy mt3">
+                                        <p onClick={() => onRouteChange('register')} className="f6 link dim black db pointer">Register</p>                            
+                                    </div>
+                                </>
+                                :
+                                <div>
+                                    Signing in...
+                                </div>
+                            }
                         </div>
                     </main>         
                     </article>                      

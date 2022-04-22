@@ -28,7 +28,12 @@ class ImageLinkForm extends Component {
                     <div className='center'>
                         <div className="form center pa4 br3 shadow-5">
                             <input onKeyUp={this.checkEnterImageDetect} className='f4 pa2 w-70 center' type='text' onChange={this.props.onInputChange} />
-                            <button className='w-30 grow f4 link ph3 pv2 dib white bg-light-purple' onClick={this.props.onDetect} >Detect</button>
+
+                            {(this.props.image_is_loading === false) ?                                                                     
+                                <button className='w-30 grow f4 link ph3 pv2 dib white bg-light-purple' onClick={this.props.onDetect} >Detect</button>                                
+                            :
+                                <div className="pt3">Detecting image...</div>
+                            }
                         </div>
                     </div>     
 

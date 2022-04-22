@@ -15,8 +15,9 @@ class Register extends Component {
             email: '',
             password: '',
             name: '',
-            country: '',
-            errors: []
+            country: '',            
+            errors: [],
+            is_loading: false
         }  
     }   
 
@@ -83,6 +84,10 @@ class Register extends Component {
                 errors: []
             });
         }
+
+        this.setState({
+            is_loading: true
+        });
         
         fetch("http://localhost:3610/register", {
             method: 'post',
@@ -96,9 +101,16 @@ class Register extends Component {
         })
          .then((response) => response.json())
          .then((user) => {
+
+            this.setState({
+                is_loading: false
+            });
+
              if (user && user?.email) {
-                this.props.loadUser(user); 
+
+                this.props.loadUser(user);  
                 this.props.onRouteChange("home");
+                
              } else {    
                 this.setState({
                     errors: ["Could not register"]
@@ -159,13 +171,22 @@ class Register extends Component {
 
                             <Validation key="RegisterValidation" type="register" errors={this.state.errors} />
 
-                            <div className="">
-                                <input onClick={() => this.onSubmitRegister()} className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib" type="submit" value="Register" />
-                            </div>
+                            {!this.state.is_loading ?
+                                <>
+                                    <div className="">
+                                        
+                                            <input onClick={() => this.onSubmitRegister()} className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib" type="submit" value="Register" />                                                                     
+                                    </div>
 
-                            <div className="lh-copy mt3">
-                                <p onClick={() => onRouteChange('signin')} className="f6 link dim black db pointer">Sign in</p>                   
-                            </div>
+                                    <div className="lh-copy mt3">
+                                        <p onClick={() => onRouteChange('signin')} className="f6 link dim black db pointer">Sign in</p>                   
+                                    </div>
+                                </> 
+                                :
+                                <div>
+                                    Registering...
+                                </div>
+                            }
 
                         </div>
                     </main>         
