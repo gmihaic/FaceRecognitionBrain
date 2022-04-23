@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import './Rank.css'
+import TopUserImages from './../TopUserImages/TopUserImages';
 
 class Rank extends Component {
 
@@ -7,11 +8,11 @@ class Rank extends Component {
 
         super();
         this.props = props;
-    }   
+    }      
            
     render() {    
 
-        const {name, entries} = this.props;
+        const {name, entries, user} = this.props;
 
         return (
             <>                          
@@ -22,7 +23,9 @@ class Rank extends Component {
                     <div className="white f1">
                         {entries}
                     </div>                                   
-                </div>              
+                </div>  
+
+                <TopUserImages entries={entries} key={"topUserImages"} user={user} />            
             </>
         );
     }

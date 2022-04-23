@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
-import Nav from './Components/Nav/Nav'
-import Logo from './Components/Logo/Logo'
-import ImageLinkForm from './Components/ImageLinkForm/ImageLinkForm'
-import FaceRecognition from './Components/FaceRecognition/FaceRecognition'
-import Signin from './Components/Signin/Signin'
-import Register from './Components/Register/Register'
-import Rank from './Components/Rank/Rank'
-import LatestDetection from './Components/LatestDetection/LatestDetection'
+import Nav from './Components/Nav/Nav';
+import Logo from './Components/Logo/Logo';
+import ImageLinkForm from './Components/ImageLinkForm/ImageLinkForm';
+import FaceRecognition from './Components/FaceRecognition/FaceRecognition';
+import Signin from './Components/Signin/Signin';
+import Register from './Components/Register/Register';
+import Rank from './Components/Rank/Rank';
+import LatestDetection from './Components/LatestDetection/LatestDetection';
 import Particles from 'react-tsparticles';
 import {particleOptions} from './config.js'
 import './App.css';
@@ -21,7 +21,7 @@ class App extends Component {
       imageURL: '',
       box: {},
       route: 'signin',
-      isSignedIn: false,
+      isSignedIn: false,      
       user: {
         id: '',
         name: '',       
@@ -145,7 +145,7 @@ class App extends Component {
             .then((response) => response.json())
             .then((data) => {               
                 if (data) {                                        
-                    this.setState(Object.assign(this.state.user, {entries: data}));
+                    this.setState(Object.assign(this.state.user, {entries: data}));                                        
                 } else {               
                 }
             });
@@ -187,10 +187,9 @@ class App extends Component {
             <>
             <Logo />
             <LatestDetection user={this.state.user} />
-            <Rank key="facerank" name={this.state.user.name} entries={this.state.user.entries} />
-            
+            <Rank user={this.state.user} key="facerank" name={this.state.user.name} entries={this.state.user.entries} />                        
             <ImageLinkForm image_is_loading={this.state.image_is_loading} onInputChange={this.onInputChange} onDetect={this.onDetect} />                    
-            <FaceRecognition image_errors={this.state.image_errors} key="facereq" box={box} imageURL={imageURL} />     
+            <FaceRecognition image_errors={this.state.image_errors} key="facereq" box={box} imageURL={imageURL} />                 
             </>
             :
             (

@@ -17,7 +17,7 @@ class Logo extends Component {
                 <div className='logoContainer ma4 mt0'>
                     <Tilt className="Tilt br2 shadow-2 pa3">
                         <div>
-                            <img width="125" height="125" alt="Logo" src={brain} />
+                            <img alt="Logo" src={brain} />
                         </div>
                     </Tilt>
                 </div>              
