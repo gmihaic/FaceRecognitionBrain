@@ -123,9 +123,12 @@ class App extends Component {
 
           this.setState(
             {           
-              image_is_loading: false          
+              image_is_loading: false,
+              input: ""         
             }
           );    
+
+          document.getElementById("imageDetectUrlInput").value = "";
 
           if (imageData && imageData?.top_row) {
             

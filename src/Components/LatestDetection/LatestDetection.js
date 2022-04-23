@@ -9,14 +9,20 @@ class LatestDetection extends Component {
         this.props = props;                  
 
         this.state = {
-            detection: null
+            detection: null,
+            displaying_current: false,
+            last_timestamp: (new Date().getTime() - 20000) //initial timestamp is 20 secs ago
         };               
     }   
 
-    loadNewData = () => {                
+    loadNewData = () => {         
+        
+        if (this.state.displaying_current) {
+            return false;
+        }
 
         let fetchURL = "http://localhost:3610/latestimage";
-        fetchURL += "/" + (new Date().getTime() - 20000);
+        fetchURL += "/" + this.state.last_timestamp;
 
         if (this?.props?.user?.id) {
             fetchURL += "/" + this.props.user.id;
@@ -29,7 +35,9 @@ class LatestDetection extends Component {
             .then((data) => {               
                 if (data && data.image_url) {                                        
                     this.setState({
-                        detection: data
+                        detection: data,
+                        displaying_current: true,
+                        last_timestamp: (new Date().getTime() + 5000)
                     });
                 } else {    
                     this.setState({
@@ -44,7 +52,7 @@ class LatestDetection extends Component {
     }
 
     componentDidMount() {       
-        this.updateTimer = setInterval(() => this.loadNewData(), 20000);
+        this.updateTimer = setInterval(() => this.loadNewData(), 5000);
     }
    
     onBoxLoaded = () => {       
@@ -53,6 +61,15 @@ class LatestDetection extends Component {
 
         setTimeout(() => {
             latestDetectionContainer.classList.remove("latestDetectionContainerShown");
+            
+            setTimeout(() => {
+                this.setState({
+                    detection: null,
+                    displaying_current: false,
+                    last_timestamp: (new Date().getTime() + 5000)                 
+                });
+            }, 4000);
+
         }, 15000);
     }
                
