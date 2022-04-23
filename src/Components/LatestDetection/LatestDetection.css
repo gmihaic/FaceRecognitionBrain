@@ -1,0 +1,12 @@
+#latestDetectionContainer {
+    position: fixed;
+    bottom: 0px;
+    left: -15%;
+    min-width: 100px;
+    width: 15%;
+    transition: all 1s ease-in-out;
+}
+
+.latestDetectionContainerShown {    
+    left: 0% !important;
+}

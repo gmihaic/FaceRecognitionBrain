@@ -6,6 +6,7 @@ import FaceRecognition from './Components/FaceRecognition/FaceRecognition'
 import Signin from './Components/Signin/Signin'
 import Register from './Components/Register/Register'
 import Rank from './Components/Rank/Rank'
+import LatestDetection from './Components/LatestDetection/LatestDetection'
 import Particles from 'react-tsparticles';
 import {particleOptions} from './config.js'
 import './App.css';
@@ -33,13 +34,7 @@ class App extends Component {
     }   
 
     this.inputURL = "";
-  }
-
-  /*componentDidMount() {
-    fetch("http://localhost:3610")
-      .then((response) => response.json())
-      .then((data) => console.log(data));
-  }*/
+  }  
 
   loadUser = (data) => {   
     this.setState({
@@ -53,8 +48,7 @@ class App extends Component {
     });
   }
 
-  calculateFaceLocation = (data) => {
-    //const clarifaiFace = data.outputs[0].data.regions[0].region_info.bounding_box;
+  calculateFaceLocation = (data) => {    
     const clarifaiFace = data; //server API returns bounding box
     const image = document.getElementById('faceRecognitionImage');
     const width = Number(image.width);
@@ -189,6 +183,7 @@ class App extends Component {
           { route === 'home' ?
             <>
             <Logo />
+            <LatestDetection user={this.state.user} />
             <Rank key="facerank" name={this.state.user.name} entries={this.state.user.entries} />
             
             <ImageLinkForm image_is_loading={this.state.image_is_loading} onInputChange={this.onInputChange} onDetect={this.onDetect} />                    
@@ -200,6 +195,7 @@ class App extends Component {
               ? 
                 <>
                   <Logo />
+                  <LatestDetection />
                   <Signin loadUser={this.loadUser} onRouteChange={this.onRouteChange} />
                 </> 
               :
