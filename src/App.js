@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import Session from 'react-session-api';
 import Nav from './Components/Nav/Nav';
 import Logo from './Components/Logo/Logo';
 import ImageLinkForm from './Components/ImageLinkForm/ImageLinkForm';
@@ -17,37 +18,64 @@ class App extends Component {
   constructor() {
     super();
     
+    Session.config(true, 14400);
+
+    const userData = this.getUserData();
+
     this.state = {
       input: '',
       imageURL: '',
       box: {},
-      route: 'signin',
-      isSignedIn: false,      
-      user: {
+      route: (userData && userData.id) ? 'home' : 'signin',
+      isSignedIn: (userData && userData.id) ? true : false,      
+      user: userData,
+      image_errors: [],
+      image_is_loading: false
+    }       
+
+    this.inputURL = "";    
+  }  
+
+  loadUser = (data) => {   
+
+    const newUserObj = {
+      id: data.id,
+      name: data.name,       
+      email: data.email,
+      entries: data.entries,
+      joined: data.joined,
+      country: data.country
+    };
+    
+    Session.set("user", JSON.stringify(newUserObj));
+
+    this.setState({
+      "user": this.getUserData()
+    });
+  }
+
+  getUserData = () => {
+    
+    let sessionUser = Session.get("user");
+
+    if (sessionUser && typeof(sessionUser) === "string" && sessionUser.length > 0) {
+      console.log("json user", sessionUser);
+      sessionUser = JSON.parse(sessionUser);
+    }
+
+    console.log("sessionUser", sessionUser);
+    if (!sessionUser || !sessionUser.id) {
+      sessionUser = {
         id: '',
         name: '',       
         email: '',
         entries: 0,
         joined: ''
-      },
-      image_errors: [],
-      image_is_loading: false
-    }   
+      };
+      console.log("setting empty user");
+    }
 
-    this.inputURL = "";
-  }  
-
-  loadUser = (data) => {   
-    this.setState({
-      "user": {
-        id: data.id,
-        name: data.name,       
-        email: data.email,
-        entries: data.entries,
-        joined: data.joined,
-        country: data.country
-      }
-    });
+    return sessionUser;
   }
 
   calculateFaceLocation = (data) => {    

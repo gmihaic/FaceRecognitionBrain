@@ -13,6 +13,7 @@
     "react-dom": "^18.0.0",
     "react-parallax-tilt": "^1.6.6",
     "react-scripts": "5.0.0",
+    "react-session-api": "^1.1.0",
     "react-tsparticles": "^1.42.4",
     "tachyons": "^4.12.0",
     "url": "^0.11.0",
