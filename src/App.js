@@ -189,7 +189,15 @@ class App extends Component {
               "image_errors": ["Could not detect the face on the image"]
             });
           }
-      });    
+      })
+      .catch((err) => {
+        this.setState(
+          {           
+            image_is_loading: false,
+            "image_errors": ["Could not detect the face on the image"]
+          }
+        );    
+      }) 
   }
 
   onRouteChange = (route) => {   
