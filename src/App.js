@@ -175,7 +175,12 @@ class App extends Component {
                     this.setState(Object.assign(this.state.user, {entries: data}));                                        
                 } else {               
                 }
-            });
+            })
+            .catch((err) => {
+                this.setState({
+                  "image_errors": ["Could not detect the face on the image"]
+                });
+            }) 
 
             //display face box
             this.displayFaceBox(this.calculateFaceLocation(imageData));
