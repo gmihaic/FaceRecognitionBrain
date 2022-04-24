@@ -27,7 +27,7 @@ class TopUserImages extends Component {
 
     loadNewData = () => {         
                         
-        const fetchURL = `http://localhost:3610/topforuser/${this.props.user.id}/3`;
+        const fetchURL = `${process.env.REACT_APP_BACKEND_URL}/topforuser/${this.props.user.id}/3`;
                       
         fetch(fetchURL, {
                 method: 'get',                                

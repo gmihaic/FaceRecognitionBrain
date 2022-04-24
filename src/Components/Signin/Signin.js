@@ -64,7 +64,7 @@ class Signin extends Component {
             is_loading: true
         });
 
-        fetch("http://localhost:3610/signin", {
+        fetch(process.env.REACT_APP_BACKEND_URL + "/signin", {
             method: 'post',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({

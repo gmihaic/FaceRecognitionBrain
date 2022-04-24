@@ -21,7 +21,7 @@ class LatestDetection extends Component {
             return false;
         }
 
-        let fetchURL = "http://localhost:3610/latestimage";
+        let fetchURL = process.env.REACT_APP_BACKEND_URL + "/latestimage";
         fetchURL += "/" + this.state.last_timestamp;
 
         if (this?.props?.user?.id) {

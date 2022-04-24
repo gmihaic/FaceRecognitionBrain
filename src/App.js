@@ -33,7 +33,7 @@ class App extends Component {
       image_is_loading: false
     }       
 
-    this.inputURL = "";    
+    this.inputURL = "";        
   }  
 
   loadUser = (data) => {   
@@ -58,12 +58,10 @@ class App extends Component {
     
     let sessionUser = Session.get("user");
 
-    if (sessionUser && typeof(sessionUser) === "string" && sessionUser.length > 0) {
-      console.log("json user", sessionUser);
+    if (sessionUser && typeof(sessionUser) === "string" && sessionUser.length > 0) {      
       sessionUser = JSON.parse(sessionUser);
     }
-
-    console.log("sessionUser", sessionUser);
+    
     if (!sessionUser || !sessionUser.id) {
       sessionUser = {
         id: '',
@@ -71,8 +69,7 @@ class App extends Component {
         email: '',
         entries: 0,
         joined: ''
-      };
-      console.log("setting empty user");
+      };      
     }
 
     return sessionUser;
@@ -139,7 +136,7 @@ class App extends Component {
       }
     );    
     
-    const imageAPIURL = 'http://localhost:3610/recogniseImage';
+    const imageAPIURL = process.env.REACT_APP_BACKEND_URL + '/recogniseImage';
 
     fetch(imageAPIURL, {
         method: 'post',
@@ -163,7 +160,7 @@ class App extends Component {
           if (imageData && imageData?.top_row) {
             
             //incr image hits
-            fetch("http://localhost:3610/image", {
+            fetch(process.env.REACT_APP_BACKEND_URL + "/image", {
                 method: 'put',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
@@ -193,9 +190,12 @@ class App extends Component {
   onRouteChange = (route) => {   
     
     if (route === "signout") {
+      
+      Session.set("user", null);
+
       this.setState({
         imageURL: ""
-      });
+      });      
     }
     
     this.setState({

@@ -78,7 +78,7 @@ class Register extends Component {
             is_loading: true
         });
         
-        fetch("http://localhost:3610/editprofile", {
+        fetch(process.env.REACT_APP_BACKEND_URL + "/editprofile", {
             method: 'post',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
