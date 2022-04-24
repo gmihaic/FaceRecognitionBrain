@@ -13,7 +13,11 @@ class Nav extends Component {
         if (this.props.isSignedIn) {    
             return ( 
                 <nav style={{display: "flex", justifyContent: "flex-end"}}>
-                <p onClick={() => this.props.onRouteChange('signout')} className='f3 link dim black underlined pa3 pointer'>Sign Out</p>
+                    { this.props.route !== "profile" 
+                        ? <p onClick={() => this.props.onRouteChange('profile')} className='f3 link dim black underlined pa3 pointer'>My Profile</p>
+                        : <p onClick={() => this.props.onRouteChange('home')} className='f3 link dim black underlined pa3 pointer'>Home</p>
+                    }             
+                    <p onClick={() => this.props.onRouteChange('signout')} className='f3 link dim black underlined pa3 pointer'>Sign Out</p>                           
                 </nav>
             );
         } else {

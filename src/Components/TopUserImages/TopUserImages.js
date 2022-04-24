@@ -12,30 +12,21 @@ class TopUserImages extends Component {
             "images": [],
             "entries": props.entries,
             "calcEntries": 0
-        };
-
-        console.log("props", props);
+        };        
     }   
 
-    componentDidMount() {    
-        console.log("mounted");   
+    componentDidMount() {            
         this.loadNewData();
     }    
 
-    componentDidUpdate() {    
-        console.log("updated");   
-        //this.loadNewData();
-        console.log("tui props", this.props);
-        console.log("tui state", this.state);
-
+    componentDidUpdate() {          
         if (this.props.entries > this.state.calcEntries) {
             this.loadNewData();
         }
     }       
 
     loadNewData = () => {         
-                
-        console.log("loading TUI data");
+                        
         const fetchURL = `http://localhost:3610/topforuser/${this.props.user.id}/3`;
                       
         fetch(fetchURL, {
@@ -73,10 +64,11 @@ class TopUserImages extends Component {
                 <div className="imageListContainer">                    
                     {images.map((elem, idx) => {
                         return (
-                            <div key={"topUserImageElementContainer" + idx} className="imageListElement dib grow shadow-2">
+                            <div key={"topUserImageElementContainer" + this.props.prependK + idx} className="imageListElement dib grow shadow-2">
                                 <div className="relative"> 
-                                    <img key={"topUserImage" + idx} id={"topUserImage" + idx} className="topUserImage" alt='' src={elem.image_url} width='100%' height='auto' />
-                                    {<BoundingBox key={"topUserImageBoundingBox" + idx} qSel={"#topUserImage" + idx} bbid={"topUserImageBoundingBox" + idx} detection={elem.detect_data} />}
+                                    <div className="imageListElementDetectionCount br-100 shadow-3 pa2 bg-light-blue f5 fw-4 avenir">{elem.detections}</div>
+                                    <img key={"topUserImage" + this.props.prependK + idx} id={"topUserImage" + this.props.prependK + idx} className="topUserImage" alt='' src={elem.image_url} />
+                                    {<BoundingBox key={"topUserImageBoundingBox" + this.props.prependK + idx} qSel={"#topUserImage" + this.props.prependK + idx} bbid={"topUserImageBoundingBox" + this.props.prependK+ idx} detection={elem.detect_data} />}
                                 </div>
                             </div>
                         );

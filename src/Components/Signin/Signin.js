@@ -87,7 +87,13 @@ class Signin extends Component {
                     errors: ["Could not sign in"]
                 });             
              }
-         });                  
+         })
+         .catch((err) => {
+            this.setState({
+                errors: ["Could not sign in"],
+                is_loading: false
+            });
+         })                        
     }
 
     checkEnterSubmit = (event) => {

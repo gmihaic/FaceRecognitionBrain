@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {countries} from 'countries-list';
-import { particleOptions } from '../../config';
 import Validation from './../../SubComponents/Validation/Validation';
 import {is_email_valid} from 'node-email-validation';
 
@@ -116,7 +115,13 @@ class Register extends Component {
                     errors: ["Could not register"]
                 });       
              }
-         });                  
+         })
+         .catch((err) => {
+            this.setState({
+                errors: ["Could not register"],
+                is_loading: false
+            });
+         })                 
     }    
 
     getCountrySelectOptions = () => {
