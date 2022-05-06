@@ -1,34 +1,46 @@
-import React, {Component} from 'react';
-import './Rank.css'
-import TopUserImages from './../TopUserImages/TopUserImages';
+import React from "react";
+import "./Rank.css";
 
-class Rank extends Component {
+const Rank = ({ name, entries, user, onImgClick }) => {
+  const [images, setImages] = React.useState([]);
 
-    constructor(props) {
+  const fetchImages = React.useCallback(async () => {
+    const res = await fetch(
+      `${process.env.REACT_APP_BACKEND_URL}/topforuser/${user.id}/20`,
+      {
+        method: "GET",
+      }
+    );
+    const data = await res.json();
+    setImages(data);
+  }, [user.id]);
 
-        super();
-        this.props = props;
-    }      
-           
-    render() {    
+  React.useEffect(() => {
+    fetchImages();
+  }, [fetchImages]);
 
-        const {name, entries, user} = this.props;
+  return (
+    <>
+      <div>
+        <div className="white f3">{name}, your current entry count is ...</div>
+        <div className="white f1">{entries}</div>
+      </div>
+      <h2>Your recently used images</h2>
+      <div className="imageListContainer">
+        {images.map((elem, idx) => {
+          return (
+            <img
+              key={`topUserImage${idx}`}
+              className="topUserImage"
+              alt=""
+              src={elem.image_url}
+              onClick={() => onImgClick(elem.image_url)}
+            />
+          );
+        })}
+      </div>
+    </>
+  );
+};
 
-        return (
-            <>                          
-                <div>      
-                    <div className="white f3">
-                        {name}, your current entry count is ...                       
-                    </div>   
-                    <div className="white f1">
-                        {entries}
-                    </div>                                   
-                </div>  
-
-                <TopUserImages entries={entries} prependK={this.props.prependK} key={this.props.prependK + "topUserImages"} user={user} />            
-            </>
-        );
-    }
-}
-
-export default Rank; 
+export default Rank;

@@ -1,8 +1,9 @@
-.bounding-box {
+.face-detection-root {
+    position: relative;
+}
+
+.face-detection-canvas {
     position: absolute;
-    box-shadow: 0 0 0 3px #149df2 inset;    
-    display: flex;
-    flex-wrap: wrap;  
-    justify-content: center;
-    cursor: pointer;    
+    top: 0;
+    left: 0;
 }

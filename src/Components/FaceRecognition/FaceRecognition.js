@@ -1,32 +1,38 @@
-import React, {Component} from 'react';
-import './FaceRecognition.css'
-import Validation from './../../SubComponents/Validation/Validation';
+import React from "react";
+import "./FaceRecognition.css";
 
-class FaceRecognition extends Component {
+const FaceRecognition = ({ box, imgProps, ...rest }) => {
+  const imgRef = React.useRef(null);
+  const canvasRef = React.useRef(null);
+  const img = imgRef.current;
+  const canvas = canvasRef.current;
 
-    constructor(props) {
-       
-        super();  
-        this.props = props;            
-    }   
-    
-           
-    render() {          
-                     
-        return (
-            <>                          
-                <div className='center ma'> 
-                    <div className='absolute mt2'>
-                        <Validation key="FacereqValidation" type="facereq" errors={this.props.image_errors} />
-                        {(this.props.image_errors.length === 0) ? <>
-                        <img id='faceRecognitionImage' alt='' src={this.props.imageURL} width='500px' height='auto' />       
-                        <div className="bounding-box" style={{top: this.props.box.topRow, right: this.props.box.rightCol, bottom: this.props.box.bottomRow, left: this.props.box.leftCol}}></div>
-                        </> : <></>}
-                    </div>                                
-                </div>              
-            </>
+  React.useLayoutEffect(() => {
+    if (img && canvas) {
+      canvas.width = img.offsetWidth;
+      canvas.height = img.offsetHeight;
+
+      if (box) {
+        const context = canvas.getContext("2d");
+        context.strokeStyle = "lime";
+        context.lineWidth = 3;
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        context.strokeRect(
+          box.x * canvas.width,
+          box.y * canvas.height,
+          box.width * canvas.width,
+          box.height * canvas.height
         );
+      }
     }
-}
+  }, [box, canvas, img]);
+
+  return (
+    <div className="face-detection-root" {...rest}>
+      <img ref={imgRef} {...imgProps} />
+      <canvas className="face-detection-canvas" ref={canvasRef} />
+    </div>
+  );
+};
 
 export default FaceRecognition;
