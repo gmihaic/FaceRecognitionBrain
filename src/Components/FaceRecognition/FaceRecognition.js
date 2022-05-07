@@ -9,26 +9,34 @@ const FaceRecognition = ({ box, imgUrl, ...rest }) => {
   const [width, setWidth] = React.useState(0);
   const [height, setHeight] = React.useState(0);
 
-  React.useLayoutEffect(() => {
+  const draw = React.useCallback((context) => {
+    if (box) {
+      context.strokeStyle = "lime";
+      context.lineWidth = 3;
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      context.strokeRect(
+        box.x * canvas.width,
+        box.y * canvas.height,
+        box.width * canvas.width,
+        box.height * canvas.height
+      );
+    }
+  }, [box, canvas]);
+
+  React.useEffect(() => {
+    let animationFrameId;
     if (img && canvas) {
       setWidth(img.offsetWidth);
       setHeight(img.offsetHeight);
-
-      if (box) {
-        console.log(box, "redraw");
-        const context = canvas.getContext("2d");
-        context.strokeStyle = "lime";
-        context.lineWidth = 3;
-        context.clearRect(0, 0, canvas.width, canvas.height);
-        context.strokeRect(
-          box.x * canvas.width,
-          box.y * canvas.height,
-          box.width * canvas.width,
-          box.height * canvas.height
-        );
-      }
+      animationFrameId = requestAnimationFrame(() =>
+        draw(canvas.getContext("2d"))
+      );
     }
-  }, [box, canvas, img, imgUrl]);
+
+    return () => {
+      cancelAnimationFrame(animationFrameId);
+    };
+  }, [box, canvas, img, imgUrl, draw]);
 
   return (
     <div className="face-detection-root" {...rest}>
