@@ -12,7 +12,6 @@ import { particleOptions } from "./config.js";
 import "./App.css";
 import FaceCompare from "./Components/FaceCompare/FaceCompare";
 import ImageLinkForm from "./Components/ImageLinkForm/ImageLinkForm";
-import { toHaveDisplayValue } from "@testing-library/jest-dom/dist/matchers";
 
 class App extends Component {
   constructor() {

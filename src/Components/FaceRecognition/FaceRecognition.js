@@ -9,19 +9,23 @@ const FaceRecognition = ({ box, imgUrl, ...rest }) => {
   const [width, setWidth] = React.useState(0);
   const [height, setHeight] = React.useState(0);
 
-  const draw = React.useCallback((context) => {
-    if (box) {
-      context.strokeStyle = "lime";
-      context.lineWidth = 3;
+  const draw = React.useCallback(
+    (context) => {
       context.clearRect(0, 0, canvas.width, canvas.height);
-      context.strokeRect(
-        box.x * canvas.width,
-        box.y * canvas.height,
-        box.width * canvas.width,
-        box.height * canvas.height
-      );
-    }
-  }, [box, canvas]);
+      
+      if (box) {
+        context.strokeStyle = "lime";
+        context.lineWidth = 3;
+        context.strokeRect(
+          box.x * canvas.width,
+          box.y * canvas.height,
+          box.width * canvas.width,
+          box.height * canvas.height
+        );
+      }
+    },
+    [box, canvas]
+  );
 
   React.useEffect(() => {
     let animationFrameId;
