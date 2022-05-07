@@ -1,4 +1,5 @@
 import React from "react";
+import Validation from "../../SubComponents/Validation/Validation";
 import { isUrlValid } from "../../utils/urlUtils";
 import FaceRecognition from "../FaceRecognition/FaceRecognition";
 import "./ImageLinkForm.css";
@@ -86,6 +87,7 @@ const ImageLinkForm = ({ userId, url, onUrlChange, onCompare }) => {
                 </button>
               )}
             </div>
+          <Validation errors={errors} />
           </form>
         </div>
       </div>
