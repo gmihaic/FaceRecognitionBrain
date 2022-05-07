@@ -12,7 +12,7 @@ const FaceCompare = ({ userId, imageUrl }) => {
   const [error, setError] = React.useState(null);
   const [box1, setBox1] = React.useState(null);
   const [box2, setBox2] = React.useState(null);
-  const color = match > 70 ? "green" : match > 40 ? "yellow" : "red";
+  const color = match > 70 ? "green" : match > 40 ? "orange" : "red";
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -61,7 +61,7 @@ const FaceCompare = ({ userId, imageUrl }) => {
           />
           {match !== null && (
             <span
-              className="face-compare-match f3"
+              className="face-compare-match f3 b"
               style={{
                 color: color,
               }}
