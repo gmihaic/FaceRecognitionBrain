@@ -6,13 +6,15 @@ const Rank = ({ name, entries, user, onImgClick }) => {
 
   const fetchImages = React.useCallback(async () => {
     const res = await fetch(
-      `${process.env.REACT_APP_BACKEND_URL}/topforuser/${user.id}/20`,
+      `${process.env.REACT_APP_BACKEND_URL}/topforuser/${user.id}/3`,
       {
         method: "GET",
       }
     );
     const data = await res.json();
-    setImages(data);
+    if (data) {
+      setImages(data);
+    }
   }, [user.id]);
 
   React.useEffect(() => {
@@ -25,20 +27,24 @@ const Rank = ({ name, entries, user, onImgClick }) => {
         <div className="white f3">{name}, your current entry count is ...</div>
         <div className="white f1">{entries}</div>
       </div>
-      <h2>Your recently used images</h2>
-      <div className="imageListContainer">
-        {images.map((elem, idx) => {
-          return (
-            <img
-              key={`topUserImage${idx}`}
-              className="topUserImage"
-              alt=""
-              src={elem.image_url}
-              onClick={() => onImgClick(elem.image_url)}
-            />
-          );
-        })}
-      </div>
+      {Array.isArray(images) && images.length > 0 && (
+        <>
+          <h2>Your recently used images</h2>
+          <div className="imageListContainer">
+            {images.map((elem, idx) => {
+              return (
+                <img
+                  key={`topUserImage${idx}`}
+                  className="pointer grow ba b--blue bw2"
+                  alt=""
+                  src={elem.image_url}
+                  onClick={() => onImgClick(elem.image_url)}
+                />
+              );
+            })}
+          </div>
+        </>
+      )}
     </>
   );
 };

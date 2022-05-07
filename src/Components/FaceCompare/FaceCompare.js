@@ -55,7 +55,7 @@ const FaceCompare = ({ userId, imageUrl }) => {
       >
         <div className="face-compare-image-container pb2">
           <FaceRecognition
-            imgProps={{ src: url1 }}
+            imgUrl={url1}
             box={box1}
             style={{ maxWidth: "40%" }}
           />
@@ -70,7 +70,7 @@ const FaceCompare = ({ userId, imageUrl }) => {
             </span>
           )}
           <FaceRecognition
-            imgProps={{ src: url2 }}
+            imgUrl={url2}
             box={box2}
             style={{ maxWidth: "40%" }}
           />
@@ -85,12 +85,16 @@ const FaceCompare = ({ userId, imageUrl }) => {
             }}
             value={url1}
           />
-          <button
-            className="w-30 grow f4 link ph3 pv2 dib white bg-light-purple"
-            type="submit"
-          >
-            Compare
-          </button>
+          {loading ? (
+            <div className="pt3">Comparing images...</div>
+          ) : (
+            <button
+              className="w-30 grow f4 link ph3 pv2 dib white bg-light-purple"
+              type="submit"
+            >
+              Compare
+            </button>
+          )}
           <input
             className="f4 pa2 w-70"
             type="text"

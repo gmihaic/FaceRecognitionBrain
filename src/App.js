@@ -11,6 +11,8 @@ import Particles from "react-tsparticles";
 import { particleOptions } from "./config.js";
 import "./App.css";
 import FaceCompare from "./Components/FaceCompare/FaceCompare";
+import ImageLinkForm from "./Components/ImageLinkForm/ImageLinkForm";
+import { toHaveDisplayValue } from "@testing-library/jest-dom/dist/matchers";
 
 class App extends Component {
   constructor() {
@@ -24,7 +26,7 @@ class App extends Component {
       route: userData && userData.id ? "home" : "signin",
       isSignedIn: userData && userData.id,
       user: userData,
-      imageURL: "",
+      imageUrl: "",
     };
   }
 
@@ -82,7 +84,11 @@ class App extends Component {
   };
 
   handleImgClick = (url) => {
-    this.setState({ imageURL: url, route: "compare" });
+    this.setState({ imageUrl: url });
+  };
+
+  handleCompare = () => {
+    this.setState({ route: "compare" });
   };
 
   render() {
@@ -112,11 +118,21 @@ class App extends Component {
               entries={this.state.user.entries}
               onImgClick={this.handleImgClick}
             />
+            <ImageLinkForm
+              userId={this.state.user.id}
+              initialUrl={this.state.imageUrl}
+              onCompare={this.handleCompare}
+              onUrlChange={({ target }) => {
+                this.setState({ imageUrl: target.value.trim() })
+              }
+              }
+              url={this.state.imageUrl}
+            />
           </>
         ) : route === "compare" ? (
           <FaceCompare
             userId={this.state.user.id}
-            imageUrl={this.state.imageURL}
+            imageUrl={this.state.imageUrl}
           />
         ) : route === "profile" ? (
           <>

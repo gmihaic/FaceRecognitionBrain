@@ -1,9 +1,15 @@
 .face-detection-root {
-    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .face-detection-canvas {
     position: absolute;
     top: 0;
     left: 0;
+}
+
+.face-detection-wrapper {
+    position: relative;
 }
