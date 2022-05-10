@@ -7,14 +7,14 @@ import "./ImageLinkForm.css";
 const ImageLinkForm = ({ userId, url, onUrlChange, onCompare }) => {
   const [loading, setLoading] = React.useState(false);
   const [errors, setErrors] = React.useState([]);
-  const [box, setBox] = React.useState(null);
+  const [boxes, setBoxes] = React.useState([]);
 
-  React.useEffect(() => setBox(null), [url]);
+  React.useEffect(() => setBoxes([]), [url]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors([]);
-    setBox(null);
+    setBoxes([]);
 
     if (!isUrlValid(url)) {
       setErrors(["Invalid image URL"]);
@@ -35,8 +35,8 @@ const ImageLinkForm = ({ userId, url, onUrlChange, onCompare }) => {
           }),
         }
       );
-      const { box } = await res.json();
-      setBox(box);
+      const { boxes } = await res.json();
+      setBoxes(boxes);
     } catch {
       setErrors(["Could not detect the face on the image"]);
     }
@@ -58,7 +58,7 @@ const ImageLinkForm = ({ userId, url, onUrlChange, onCompare }) => {
             className="image-link-form center pa4 br3 shadow-5"
             onSubmit={handleSubmit}
           >
-            <FaceRecognition box={box} imgUrl={url} />
+            <FaceRecognition boxes={boxes} imgUrl={url} />
             <div className="image-link-form-input-container">
               <input
                 className="f4 pa2 flex-auto"
@@ -78,7 +78,7 @@ const ImageLinkForm = ({ userId, url, onUrlChange, onCompare }) => {
                   Detect
                 </button>
               )}
-              {box !== null && (
+              {boxes.length > 0 && (
                 <button
                   className="w-30 grow f4 link ph3 pv2 dib white bg-light-purple"
                   onClick={onCompare}
@@ -87,7 +87,7 @@ const ImageLinkForm = ({ userId, url, onUrlChange, onCompare }) => {
                 </button>
               )}
             </div>
-          <Validation errors={errors} />
+            <Validation errors={errors} />
           </form>
         </div>
       </div>

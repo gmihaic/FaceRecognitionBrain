@@ -56,7 +56,7 @@ const FaceCompare = ({ userId, imageUrl }) => {
         <div className="face-compare-image-container pb2">
           <FaceRecognition
             imgUrl={url1}
-            box={box1}
+            boxes={[box1]}
             style={{ maxWidth: "40%" }}
           />
           {match !== null && (
@@ -71,7 +71,7 @@ const FaceCompare = ({ userId, imageUrl }) => {
           )}
           <FaceRecognition
             imgUrl={url2}
-            box={box2}
+            boxes={[box2]}
             style={{ maxWidth: "40%" }}
           />
         </div>
